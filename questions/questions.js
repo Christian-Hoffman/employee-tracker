@@ -1,17 +1,17 @@
 const questions = {
-    firstChoice: [{
+    initChoice: [{
         type: 'rawlist',
         name: 'choice',
         message: 'Choose an option',
         choices: [
             'View all employees',
+            'View all departments',
+            'View all roles',
+            'Add department',
+            'Add role',
             'Add an employee',
             'Update employee role',
-            'View all roles',
-            'Add role',
-            'View all departments',
-            'Add department',
-            'Exit',
+            'Exit'
         ],
     }],
     addDepartment: [{

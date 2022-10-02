@@ -28,6 +28,7 @@ const showAllEmployees = () => {
       if (err) console.log(err);
       console.table(data);
     //   showOptions();
+    process.exit();
     })
 };
 
@@ -40,25 +41,27 @@ const showAllDepartments = () => {
         if (err) console.log(err);
         console.table(data);
         // showOptions();
+        process.exit();
     })
 };
 
 const showAllRole = () => {
-    db.query(`SELECT role.id, title, salary, name AS department FROM role JOIN department ON role.department_id = department_id`,
+    db.query(`SELECT role.id, title, salary, name AS department_name FROM role INNER JOIN department WHERE role.department_id = department.id`,
     (err, data) => {
         if (err) console.log(err);
         console.table(data);
         // showOptions();
+        process.exit();
     })
 };
 
 const addDepartment = async () => {
-    // const input = await prompt(questions.addDepartment);
-    // db.query('INSERT INTO department SET ?', input, (err) => {
-    //     if (err) console.log(err);
-    //     console.log(`Added a ${input.name}`);
-    //     // showOptions();
-    // })
+    const input = await prompt(questions.addDepartment);
+    db.query('INSERT INTO department SET ?', input, (err) => {
+        if (err) console.log(err);
+        console.log(`Added a ${input.name}`);
+        // showOptions();
+    })
 };
 
 const addRole = async () => {
@@ -80,7 +83,8 @@ const updateEmployeeRole = () => {
 
 const showOptions = async () => {
     const answers = await prompt(questions.initChoice);
-    switch(answers) {
+    console.log(answers.choice);
+    switch(answers.choice) {
         case 'View all employees': {
             return showAllEmployees();
         }
@@ -108,6 +112,10 @@ const showOptions = async () => {
     }
 };
 
-// showOptions();
+showOptions();
 
-showAllRole();
+// showAllEmployees();
+
+// showAllDepartments();
+
+// showAllRole();

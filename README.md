@@ -17,7 +17,7 @@ run 'mysql -u root' \
 run 'source db/schema.sql' to create the database \
 if you want to test with pre-made data run 'source db/seeds.sql' \
 run 'quit' or 'exit' to leave the sql shell \
-run 'node server.js' to start the program \
+run 'node server.js' to start the program
 
 [Walkthrough video](https://drive.google.com/file/d/16M8zeyItcT59EJi5SrU4ual_U72YgIzg/view?usp=sharing)
 

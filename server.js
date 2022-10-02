@@ -93,7 +93,20 @@ const addEmployee = () => {
 };
 
 const updateEmployeeRole = () => {
-
+    db.query('SELECT CONCAT(first_name, " ", last_name) AS name, id AS value FROM employee', (err, employeeChoices) => {
+        if (err) console.log(err);
+        questions.updateEmployeeRole[0].choices = employeeChoices;
+        db.query('SELECT title AS name, id AS value FROM role', async (err, chooseRole) => {
+            if (err) console.log(err);
+            questions.updateEmployeeRole[1].choices = chooseRole;
+            const input = await prompt(questions.updateEmployeeRole);
+            db.query(`UPDATE employee SET role_id = ? WHERE id = ?`, [input.role_id, input.id], (err) => {
+                if (err) console.log(err);
+                console.log('Employee role updated');
+                showOptions();
+            });
+        });
+    });
 };
 
 const showOptions = async () => {

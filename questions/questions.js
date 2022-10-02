@@ -33,7 +33,7 @@ const questions = {
         {
             input: 'rawlist',
             name: 'department_id',
-            message: 'Which department is the role in?',
+            message: 'Which department is the role in? (Enter department id)',
             choices: []
         },
     ],

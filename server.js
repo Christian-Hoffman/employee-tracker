@@ -27,12 +27,9 @@ const showAllEmployees = () => {
     `, (err, data) => {
       if (err) console.log(err);
       console.table(data);
-    //   showOptions();
-    process.exit();
-    })
+      showOptions();
+    });
 };
-
-// SELECT employee.id, CONCAT(employee.first_name, ' ', employee.last_name) AS name FROM employee;
 
 
 const showAllDepartments = () => {
@@ -40,9 +37,8 @@ const showAllDepartments = () => {
     (err, data) => {
         if (err) console.log(err);
         console.table(data);
-        // showOptions();
-        process.exit();
-    })
+        showOptions();
+    });
 };
 
 const showAllRole = () => {
@@ -50,9 +46,8 @@ const showAllRole = () => {
     (err, data) => {
         if (err) console.log(err);
         console.table(data);
-        // showOptions();
-        process.exit();
-    })
+        showOptions();
+    });
 };
 
 const addDepartment = async () => {
@@ -60,21 +55,41 @@ const addDepartment = async () => {
     db.query('INSERT INTO department SET ?', input, (err) => {
         if (err) console.log(err);
         console.log(`Added a ${input.name}`);
-        // showOptions();
-    })
+        showOptions();
+    });
 };
 
-const addRole = async () => {
-    // const input = await prompt(questions.addRole[0]);
-    // db.query('INSERT INTO role SET ?', input, (err) => {
-    //     if (err) console.log(err);
-    //     console.log(`Added a ${input.name}`);
-    //     // showOptions();
-    // })
+const addRole = () => {
+    db.query('SELECT name, id AS value FROM department', async (err, answers) => {
+        if(err) console.log(err);
+        questions.addRole[2].choices = answers;
+        const input = await prompt(questions.addRole);
+        db.query('INSERT INTO role SET ?', input, (err) => {
+            if(err) console.log(err);
+            console.log(`Added ${input.title}`);
+            showOptions();
+        });
+    });
 };
 
 const addEmployee = () => {
-
+    db.query(`SELECT CONCAT(first_name, ' ', last_name) AS name, id AS value FROM employee WHERE manager_id IS NULL`,
+    (err, managerChoices) => {
+        if (err) console.log(err);
+        const answers = [...managerChoices, { name: 'none', value: 0 }];
+        questions.addEmployee[3].choices = answers;
+        db.query('SELECT title AS name, id AS value FROM role', async (err, chooseRole) => {
+            if (err) console.log(err);
+            questions.addEmployee[2].choices = chooseRole;
+            const input = await prompt(questions.addEmployee);
+            if (input.manager_id === 0) delete input.manager_id;
+            db.query('INSERT INTO employee SET ?', input, (err) => {
+                if (err) console.log(err);
+                console.log('New employee added');
+                showOptions();
+            });
+        });
+    });
 };
 
 const updateEmployeeRole = () => {
@@ -119,3 +134,11 @@ showOptions();
 // showAllDepartments();
 
 // showAllRole();
+
+// addDepartment();
+
+// addRole();
+
+// addEmployee();
+
+// updateEmployeeRole();
